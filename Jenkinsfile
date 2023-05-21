@@ -53,7 +53,6 @@ pipeline {
                 clangScanBuild(pattern: '**/*.cpp') // Use the Clang Scan-Build tool for static code analysis
             ],
             aggregatingResults: true,
-            canResolveRelativePaths: false,
             filters: [
                 excludePattern('.*\\.h$'), // Exclude header files from analysis
                 excludeFile('**/*.cpp') // Exclude specific files from analysis
@@ -64,8 +63,7 @@ pipeline {
         )
     }
 }
-
-    
+   
 		
 		
         stage('SonarQube Analysis') {
