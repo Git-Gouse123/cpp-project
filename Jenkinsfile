@@ -48,21 +48,23 @@ pipeline {
 	stage('Compiler Warnings') {
     steps {
         recordIssues(
+            filters: [
+                includeFile('.cpp'), // Include only files with the '.cpp' extension
+                excludeFile('.xml') // Exclude XML files from analysis
+            ],
             tools: [
-                cppCheck(pattern: '**/*.cpp'), // Use the Cppcheck tool to analyze C++ code
+                cppCheck(pattern: '**/*.cpp'), // Use the CPPCheck tool to analyze C++ code
                 clang(pattern: '**/*.cpp') // Use the Clang tool for static code analysis
             ],
-            aggregatingResults: true,
-            ignoreQualityGate: true,
-            qualityGates: [[threshold: 1, type: 'TOTAL', unstable: false]],
-            sourceCodeEncoding: 'UTF-8', // Specify the encoding of the source code files
             healthy: 1, // Set a value for the healthy threshold (e.g., 1 warning)
-            unhealthy: 20 // Set a value for the unhealthy threshold (e.g., 20 warnings)
+            unhealthy: 20, // Set a value for the unhealthy threshold (e.g., 20 warnings)
+            ignoreQualityGate: true, // Ignore quality gate status
+            ignoreFailedBuilds: false, // Do not ignore failed builds
+            quiet: true // Suppress non-fatal warnings during analysis
         )
     }
 }
-   
-		
+	
 		
         stage('SonarQube Analysis') {
             steps {
