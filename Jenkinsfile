@@ -2,8 +2,8 @@ pipeline {
     agent any
     
     parameters {
-        string(name: 'ProjectName', value: 'cpp-project', description: 'Name of the project')
-        string(name: 'BuildPath', value: 'build/', description: 'Build path')
+        string(name: 'ProjectName', defaultValue: 'cpp-project', description: 'Name of the project')
+        string(name: 'BuildPath', defaultValue: 'build/', description: 'Build path')
         string(name: 'BuildCommand', description: 'Build command')
     }
     
