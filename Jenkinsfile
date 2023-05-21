@@ -47,23 +47,22 @@ pipeline {
         }
 	stage('Compiler Warnings') {
     steps {
-        script {
-            def gccScan = gcc(pattern: '**/*.cpp')
-            def clangScan = clang(pattern: '**/*.cpp')
-            
-            def totalWarnings = gccScan + clangScan
-            
-            if (totalWarnings > 0) {
-                def report = scanForIssues tool: warningsNg(), pattern: '**/*.cpp'
-                report.addQualityGateConditions(healthy: 1, unhealthy: 20)
-                report.setIgnoreQualityGate(true)
-                report.setIgnoreFailedBuilds(false)
-                report.setQuiet(true)
-                report.publishIssues()
-            }
-        }
+        recordIssues(
+            tools: [
+                cppCheck(pattern: '**/*.cpp'),
+                clang(pattern: '**/*.cpp')
+            ],
+            healthy: 1,
+            unhealthy: 20,
+            ignoreQualityGate: true,
+            ignoreFailedBuilds: false,
+            quiet: true,
+            sourceCodeEncoding: 'UTF-8',
+            trendChartType: 'TOOLS_AGGREGATION'
+        )
     }
 }
+
 
 	
 		
