@@ -1,5 +1,10 @@
 pipeline {
-    agent none
+    agent {
+        docker {
+            image 'gousedocker1/cpp-project:demo'
+            args '-v $BUILD_PATH:/build'
+        }
+    }
     parameters {
         string(name: 'ProjectName', description: 'Name of the project')
         string(name: 'BuildPath', description: 'Build path')
@@ -7,7 +12,6 @@ pipeline {
     }
     stages {
         stage('Checkout') {
-            agent any
             steps {
                 // Checkout your source code from version control (e.g., Git)
                 // Replace the repository URL and credentials with your own
@@ -15,12 +19,6 @@ pipeline {
             }
         }
         stage('Build') {
-            agent {
-                docker {
-                    image 'gousedocker1/cpp-project:demo'
-                    args '-v $BUILD_PATH:/build'
-                }
-            }
             steps {
                 sh "mkdir -p $BUILD_PATH"
                 dir("$BUILD_PATH") {
@@ -30,12 +28,6 @@ pipeline {
             }
         }
         stage('Test') {
-            agent {
-                docker {
-                    image 'gousedocker1/cpp-project:demo'
-                    args '-v $BUILD_PATH:/build'
-                }
-            }
             steps {
                 dir("$BUILD_PATH") {
                     sh "make test"
@@ -43,12 +35,6 @@ pipeline {
             }
         }
         stage('Coverage') {
-            agent {
-                docker {
-                    image 'gousedocker1/cpp-project:demo'
-                    args '-v $BUILD_PATH:/build'
-                }
-            }
             steps {
                 dir("$BUILD_PATH") {
                     sh "make coverage"
@@ -57,6 +43,10 @@ pipeline {
         }
     }
     post {
+        always {
+            // Release the Docker container
+            docker.image('gousedocker1/cpp-project:demo').remove()
+        }
         success {
             // Perform additional actions on successful build
             echo 'Build succeeded!'
