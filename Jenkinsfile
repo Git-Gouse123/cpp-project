@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'gousedocker1/cpp-project:demo'
+            image 'jenkins/agent:latest'
             args '-v $BUILD_PATH:build/'
         }
     }
