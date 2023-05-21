@@ -15,38 +15,43 @@ pipeline {
         }
         
         stage('Build') {
-             args '-v $BUILD_PATH:build/'
             steps {
-                sh "mkdir -p $BuildPath"
-                dir("$BuildPath") {
-                    sh "cmake .. -DCMAKE_BUILD_TYPE=coverage"
-                    sh "make"
+                script {
+                    sh "mkdir -p ${params.BuildPath}"
+                    dir("${params.BuildPath}") {
+                        sh "cmake .. -DCMAKE_BUILD_TYPE=coverage"
+                        sh "make"
+                    }
                 }
             }
         }
         
         stage('Test') {
-            args '-v $BUILD_PATH:build/'
             steps {
-                dir("$BuildPath") {
-                    sh "make test"
+                script {
+                    dir("${params.BuildPath}") {
+                        sh "make test"
+                    }
                 }
             }
         }
         
         stage('Coverage') {
-            args '-v $BUILD_PATH:build/'
             steps {
-                dir("$BuildPath") {
-                    sh "make coverage"
+                script {
+                    dir("${params.BuildPath}") {
+                        sh "make coverage"
+                    }
                 }
             }
         }
         
         stage('SonarQube Analysis') {
             steps {
-                dir("$workspace") {
-                    sh "/var/lib/jenkins/workspace/cpp-project_master/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner"
+                script {
+                    dir("${workspace}") {
+                        sh "/var/lib/jenkins/workspace/cpp-project_master/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner"
+                    }
                 }
             }
         }
