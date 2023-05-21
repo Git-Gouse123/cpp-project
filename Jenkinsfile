@@ -15,6 +15,7 @@ pipeline {
         }
         
         stage('Build') {
+             args '-v $BUILD_PATH:build/'
             steps {
                 sh "mkdir -p $BuildPath"
                 dir("$BuildPath") {
@@ -25,6 +26,7 @@ pipeline {
         }
         
         stage('Test') {
+            args '-v $BUILD_PATH:build/'
             steps {
                 dir("$BuildPath") {
                     sh "make test"
@@ -33,6 +35,7 @@ pipeline {
         }
         
         stage('Coverage') {
+            args '-v $BUILD_PATH:build/'
             steps {
                 dir("$BuildPath") {
                     sh "make coverage"
