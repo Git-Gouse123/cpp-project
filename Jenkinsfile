@@ -40,17 +40,12 @@ pipeline {
             }
         }
     }
-    post {
-        always {
-            script {
-                docker.image('gousedocker1/cpp-project:demo').remove(force: true)
-            }
-        }
+    
         success {
             echo 'Build succeeded!'
         }
         failure {
             echo 'Build failed!'
         }
-    }
+    
 }
