@@ -42,8 +42,9 @@ pipeline {
         
         stage('SonarQube Analysis') {
             steps {
-                dir("$workspace)"
-                    sh  'sonar-scanner'
+                dir("$workspace") {
+                    sh "sonar-scanner"
+                }
             }
         }
     }
