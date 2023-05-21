@@ -49,25 +49,22 @@ pipeline {
     steps {
         recordIssues(
             tools: [
-                pmdParser(pattern: '**/*.cpp'),
-                checkStyle(pattern: '**/*.cpp')
+                cppCheck(pattern: '**/*.cpp', reportEncoding: 'UTF-8'), // Use the Cppcheck tool to analyze C++ code
+                clang(pattern: '**/*.cpp', reportEncoding: 'UTF-8') // Use the Clang tool for static code analysis
             ],
-            enabledForFailure: true,
-            healthy: 1,
-            unhealthy: 20,
+	    publishAllIssues: true,
+            aggregatingResults: true,
             ignoreQualityGate: true,
-            ignoreFailedBuilds: false,
-            publishAllIssues: true,
-            quiet: true,
-            skipBlames: true,
-            sourceCodeEncoding: 'UTF-8',
-            trendChartType: 'TOOLS_AGGREGATION'
+	    trendChartType: 'TOOLS_AGGREGATION'
+            qualityGates: [[threshold: 1, type: 'TOTAL', unstable: false]],
+            sourceCodeEncoding: 'UTF-8', // Specify the encoding of the source code files
+            healthy: 1, // Set a value for the healthy threshold (e.g., 1 warning)
+            unhealthy: 20 // Set a value for the unhealthy threshold (e.g., 20 warnings)
         )
     }
 }
-
-
-		
+            
+            	
         stage('SonarQube Analysis') {
             steps {
                 script {
