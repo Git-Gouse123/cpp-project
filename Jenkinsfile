@@ -1,22 +1,21 @@
 pipeline {
-    agent {
-        docker {
-            image 'gousedocker1/cpp-project:demo'
-            args '-v $BUILD_PATH:/build -v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+    agent any
+    
     parameters {
         string(name: 'ProjectName', description: 'Name of the project')
         string(name: 'BuildPath', description: 'Build path')
         string(name: 'BuildCommand', description: 'Build command')
     }
+    
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'master', credentialsId: 'Git', url: 'https://github.com/Git-Gouse123/cpp-project.git'
             }
         }
+        
         stage('Build') {
+            
             steps {
                 sh "mkdir -p $BUILD_PATH"
                 dir("$BUILD_PATH") {
@@ -25,25 +24,40 @@ pipeline {
                 }
             }
         }
+        
         stage('Test') {
+            
             steps {
                 dir("$BUILD_PATH") {
                     sh "make test"
                 }
             }
         }
+        
         stage('Coverage') {
+            
             steps {
                 dir("$BUILD_PATH") {
                     sh "make coverage"
                 }
             }
         }
+        
+        stage('SonarQube Analysis') {
+            
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh 'sonar-scanner'
+                }
+            }
+        }
     }
+    
     post {
         success {
             echo 'Build succeeded!'
         }
+        
         failure {
             echo 'Build failed!'
         }
