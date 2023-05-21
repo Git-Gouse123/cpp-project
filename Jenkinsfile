@@ -50,7 +50,7 @@ pipeline {
         recordIssues(
             
             tools: [
-                cppCheck(pattern: '**/*.cpp'), // Use the CPPCheck tool to analyze C++ code
+                gcc(pattern: '**/*.cpp'), // Use the GCC tool to analyze C++ code
                 clang(pattern: '**/*.cpp') // Use the Clang tool for static code analysis
             ],
             healthy: 1, // Set a value for the healthy threshold (e.g., 1 warning)
