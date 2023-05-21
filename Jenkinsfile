@@ -52,11 +52,12 @@ pipeline {
                 pmdParser(pattern: '**/*.cpp'),
                 checkStyle(pattern: '**/*.cpp')
             ],
-            failOnError: true,
+            enabledForFailure: true,
             healthy: 1,
             unhealthy: 20,
             ignoreQualityGate: true,
             ignoreFailedBuilds: false,
+            publishAllIssues: true,
             quiet: true,
             skipBlames: true,
             sourceCodeEncoding: 'UTF-8',
@@ -64,6 +65,7 @@ pipeline {
         )
     }
 }
+
 
 		
         stage('SonarQube Analysis') {
