@@ -49,8 +49,8 @@ pipeline {
     steps {
         recordIssues(
             tools: [
-                cppCheck(pattern: '**/*.cpp', reportEncoding: 'UTF-8'), // Use the Cppcheck tool to analyze C++ code
-                clang(pattern: '**/*.cpp', reportEncoding: 'UTF-8') // Use the Clang tool for static code analysis
+                cppCheck(pattern: '**/*.cpp'), // Use the Cppcheck tool to analyze C++ code
+                clang(pattern: '**/*.cpp') // Use the Clang tool for static code analysis
             ],
             aggregatingResults: true,
             ignoreQualityGate: true,
