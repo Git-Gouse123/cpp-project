@@ -44,27 +44,19 @@ pipeline {
         }
         stage('Coverage') {
             agent {
-                 docker {
-                     image 'gousedocker1/cpp-project:demo'
-                     args '-v $BUILD_PATH:/build'
-                 }
-               }
-               steps {
-                   dir("$BUILD_PATH") {
-                       sh " make coverage"
-                  }
-                  
-                 }
-               
-               }
-	}
-    post {
-        always {
-            // Release the Docker container
-            docker.withServer('tcp://127.0.0.1:4243') {
-                docker.image('gousedocker1/cpp-project:demo').remove()
+                docker {
+                    image 'gousedocker1/cpp-project:demo'
+                    args '-v $BUILD_PATH:/build'
+                }
+            }
+            steps {
+                dir("$BUILD_PATH") {
+                    sh "make coverage"
+                }
             }
         }
+    }
+    post {
         success {
             // Perform additional actions on successful build
             echo 'Build succeeded!'
