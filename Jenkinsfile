@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'gousedocker1/cpp-project:demo'
-            args '-v $BUILD_PATH:/build'
+            args '-v $BUILD_PATH:build/'
         }
     }
     parameters {
