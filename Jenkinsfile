@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label "master"
+    }
     
     parameters {
         string(name: 'ProjectName', description: 'Name of the project')
@@ -46,8 +48,11 @@ pipeline {
         stage('SonarQube Analysis') {
             
             steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh 'sonar-scanner'
+                script {
+                    def scannerHome = tool 'SonarQube Scanner'
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
                 }
             }
         }
