@@ -48,17 +48,23 @@ pipeline {
 	stage('Compiler Warnings') {
     steps {
         recordIssues(
-            tool: warningsNg(), // Use the Warnings Next Generation plugin
+            tools: [
+                cppcheck(pattern: '**/*.cpp'), // Use the Cppcheck tool to analyze C++ code
+                clangScanBuild(pattern: '**/*.cpp') // Use the Clang Scan-Build tool for static code analysis
+            ],
             aggregatingResults: true,
-            name: 'Warnings', // Specify a name for the tool (e.g., 'Warnings')
-            sourceCodeEncoding: '', // Set the source code encoding
-            filters: [excludePattern: '', filters: '**/*.cpp'], // Adjust the exclude and include patterns
-            healthy: 1, // Set a value for the healthy threshold (e.g., 1 for no warnings)
-            unhealthy: 0, // Set a value for the unhealthy threshold (e.g., 0 for no warnings)
-            ignoreQualityGate: false
+            canResolveRelativePaths: false,
+            filters: [
+                excludePattern('.*\\.h$'), // Exclude header files from analysis
+                excludeFile('**/*.cpp') // Exclude specific files from analysis
+            ],
+            healthy: 1, // Set a value for the healthy threshold (e.g., 1 warning)
+            unhealthy: 20, // Set a value for the unhealthy threshold (e.g., 20 warnings)
+            sourceCodeEncoding: 'UTF-8' // Specify the encoding of the source code files
         )
     }
 }
+
     
 		
 		
