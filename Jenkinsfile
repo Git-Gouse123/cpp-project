@@ -47,20 +47,24 @@ pipeline {
         }
 	stage('Compiler Warnings') {
     steps {
-        recordIssues(
+        script {
+            def gccScan = gcc(pattern: '**/*.cpp')
+            def clangScan = clang(pattern: '**/*.cpp')
             
-            tools: [
-                gcc(pattern: '**/*.cpp'), // Use the GCC tool to analyze C++ code
-                clang(pattern: '**/*.cpp') // Use the Clang tool for static code analysis
-            ],
-            healthy: 1, // Set a value for the healthy threshold (e.g., 1 warning)
-            unhealthy: 20, // Set a value for the unhealthy threshold (e.g., 20 warnings)
-            ignoreQualityGate: true, // Ignore quality gate status
-            ignoreFailedBuilds: false, // Do not ignore failed builds
-            quiet: true // Suppress non-fatal warnings during analysis
-        )
+            def totalWarnings = gccScan + clangScan
+            
+            if (totalWarnings > 0) {
+                def report = scanForIssues tool: warningsNg(), pattern: '**/*.cpp'
+                report.addQualityGateConditions(healthy: 1, unhealthy: 20)
+                report.setIgnoreQualityGate(true)
+                report.setIgnoreFailedBuilds(false)
+                report.setQuiet(true)
+                report.publishIssues()
+            }
+        }
     }
 }
+
 	
 		
         stage('SonarQube Analysis') {
