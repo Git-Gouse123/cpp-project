@@ -48,10 +48,7 @@ pipeline {
 	stage('Compiler Warnings') {
     steps {
         recordIssues(
-            filters: [
-                includeFile('.cpp'), // Include only files with the '.cpp' extension
-                excludeFile('.xml') // Exclude XML files from analysis
-            ],
+            
             tools: [
                 cppCheck(pattern: '**/*.cpp'), // Use the CPPCheck tool to analyze C++ code
                 clang(pattern: '**/*.cpp') // Use the Clang tool for static code analysis
