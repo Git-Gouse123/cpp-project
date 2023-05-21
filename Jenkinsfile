@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label "master"
-    }
+    agent any
     
     parameters {
         string(name: 'ProjectName', description: 'Name of the project')
@@ -19,8 +17,8 @@ pipeline {
         stage('Build') {
             
             steps {
-                sh "mkdir -p $BUILD_PATH"
-                dir("$BUILD_PATH") {
+                sh "mkdir -p $BuildPath"
+                dir("$BuildPath") {
                     sh "cmake .. -DCMAKE_BUILD_TYPE=coverage"
                     sh "make"
                 }
@@ -30,7 +28,7 @@ pipeline {
         stage('Test') {
             
             steps {
-                dir("$BUILD_PATH") {
+                dir("$BuildPath") {
                     sh "make test"
                 }
             }
@@ -39,7 +37,7 @@ pipeline {
         stage('Coverage') {
             
             steps {
-                dir("$BUILD_PATH") {
+                dir("$BuildPath") {
                     sh "make coverage"
                 }
             }
@@ -48,11 +46,8 @@ pipeline {
         stage('SonarQube Analysis') {
             
             steps {
-                script {
-                    def scannerHome = tool 'SonarQube Scanner'
-                    withSonarQubeEnv('SonarQube') {
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
+                withSonarQubeEnv('SonarQube') {
+                    sh 'sonar-scanner'
                 }
             }
         }
