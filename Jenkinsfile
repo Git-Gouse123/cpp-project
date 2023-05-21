@@ -47,22 +47,20 @@ pipeline {
         }
 		
 		stage('Compiler Warnings') {
-            steps {
-                recordIssues(
-                    tool: warningsNg(), // Use the Warnings Next Generation plugin
-                    aggregatingResults: true,
-                    canComputeNew: false,
-                    canResolveRelativePaths: false,
-                    defaultEncoding: '',
-                    excludePattern: '',
-                    healthy: '',
-                    includePattern: '**/*.cpp', // Adjust the pattern to match your source code files
-                    pattern: '',
-                    unHealthy: ''
-                )
-            }
-        }
-        
+    steps {
+        recordIssues(
+            tool: warningsNg(), // Use the Warnings Next Generation plugin
+            aggregatingResults: true,
+            name: 'Warnings', // Specify a name for the tool (e.g., 'Warnings')
+            sourceCodeEncoding: '', // Set the source code encoding
+            filters: [excludePattern: '', includePattern: '**/*.cpp'], // Adjust the exclude and include patterns
+            healthy: 0, // Set a value for the healthy threshold (e.g., 0 for no warnings)
+            unHealthy: 0, // Set a value for the unhealthy threshold (e.g., 0 for no warnings)
+            canResolveRelativePaths: false,
+            ignoreQualityGate: false
+        )
+    }
+}
         stage('SonarQube Analysis') {
             steps {
                 script {
