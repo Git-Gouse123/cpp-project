@@ -49,19 +49,24 @@ pipeline {
     steps {
         recordIssues(
             tools: [
-                cppCheck(pattern: '**/*.cpp'),
-                clang(pattern: '**/*.cpp')
+                checkStyle(pattern: '**/*.cpp'),
+                clangScanBuild(pattern: '**/*.cpp')
             ],
+            enabledForFailure: true,
             healthy: 1,
             unhealthy: 20,
             ignoreQualityGate: true,
             ignoreFailedBuilds: false,
             quiet: true,
             sourceCodeEncoding: 'UTF-8',
-            trendChartType: 'TOOLS_AGGREGATION'
+            trendChartType: 'TOOLS_AGGREGATION',
+            qualityGates: [
+                [threshold: 1, type: 'TOTAL', unstable: false]
+            ]
         )
     }
 }
+
 
 
 	
