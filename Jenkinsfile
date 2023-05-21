@@ -50,15 +50,17 @@ pipeline {
         recordIssues(
     tools: [
         cppCheck(pattern: '**/*.cpp'),
-        clangAnalyzer()
+        clang(pattern: '**/*.cpp')
     ],
     failOnError: true,
     healthy: 1,
     ignoreQualityGate: true,
     publishAllIssues: true,
     quiet: true,
+    skipPublishingChecks: true,
     unhealthy: 20
 )
+
 
     }
 }
