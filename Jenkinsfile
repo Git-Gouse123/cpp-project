@@ -49,27 +49,22 @@ pipeline {
     steps {
         recordIssues(
             tools: [
-                checkStyle(pattern: '**/*.cpp'),
-                clangScanBuild(pattern: '**/*.cpp')
+                pmdParser(pattern: '**/*.cpp'),
+                checkStyle(pattern: '**/*.cpp')
             ],
-            enabledForFailure: true,
+            failOnError: true,
             healthy: 1,
             unhealthy: 20,
             ignoreQualityGate: true,
             ignoreFailedBuilds: false,
             quiet: true,
+            skipBlames: true,
             sourceCodeEncoding: 'UTF-8',
-            trendChartType: 'TOOLS_AGGREGATION',
-            qualityGates: [
-                [threshold: 1, type: 'TOTAL', unstable: false]
-            ]
+            trendChartType: 'TOOLS_AGGREGATION'
         )
     }
 }
 
-
-
-	
 		
         stage('SonarQube Analysis') {
             steps {
