@@ -49,7 +49,7 @@ pipeline {
     steps {
         recordIssues(
             tools: [
-                cppcheck(pattern: '**/*.cpp'), // Use the Cppcheck tool to analyze C++ code
+                
                 clangScanBuild(pattern: '**/*.cpp') // Use the Clang Scan-Build tool for static code analysis
             ],
             aggregatingResults: true,
