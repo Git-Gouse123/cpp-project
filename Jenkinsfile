@@ -15,7 +15,6 @@ pipeline {
         }
         
         stage('Build') {
-            
             steps {
                 sh "mkdir -p $BuildPath"
                 dir("$BuildPath") {
@@ -26,7 +25,6 @@ pipeline {
         }
         
         stage('Test') {
-            
             steps {
                 dir("$BuildPath") {
                     sh "make test"
@@ -35,7 +33,6 @@ pipeline {
         }
         
         stage('Coverage') {
-            
             steps {
                 dir("$BuildPath") {
                     sh "make coverage"
@@ -43,12 +40,16 @@ pipeline {
             }
         }
         
-stage('SonarQube Analysis') {
-    def scannerHome = tool 'SonarScanner';
-    withSonarQubeEnv() {
-      sh "${scannerHome}/bin/sonar-scanner"
-    }
-  }
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarScanner'
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
+        }
     }
     
     post {
