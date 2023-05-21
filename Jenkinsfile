@@ -49,17 +49,15 @@ pipeline {
     steps {
         recordIssues(
             tools: [
-                
-                clangScanBuild(pattern: '**/*.cpp') // Use the Clang Scan-Build tool for static code analysis
+                cppCheck(pattern: '**/*.cpp', reportEncoding: 'UTF-8'), // Use the Cppcheck tool to analyze C++ code
+                clang(pattern: '**/*.cpp', reportEncoding: 'UTF-8') // Use the Clang tool for static code analysis
             ],
             aggregatingResults: true,
-            filters: [
-                excludePattern('.*\\.h$'), // Exclude header files from analysis
-                excludeFile('**/*.cpp') // Exclude specific files from analysis
-            ],
+            ignoreQualityGate: true,
+            qualityGates: [[threshold: 1, type: 'TOTAL', unstable: false]],
+            sourceCodeEncoding: 'UTF-8', // Specify the encoding of the source code files
             healthy: 1, // Set a value for the healthy threshold (e.g., 1 warning)
-            unhealthy: 20, // Set a value for the unhealthy threshold (e.g., 20 warnings)
-            sourceCodeEncoding: 'UTF-8' // Specify the encoding of the source code files
+            unhealthy: 20 // Set a value for the unhealthy threshold (e.g., 20 warnings)
         )
     }
 }
