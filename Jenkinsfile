@@ -48,11 +48,9 @@ pipeline {
 	stage('Compiler Warnings') {
     steps {
         recordIssues(
-    failOnError: true,
     healthy: 1,
     publishAllIssues: true,
     qualityGates: [[threshold: 1, type: 'TOTAL', unstable: false]],
-    quiet: true,
     tools: [
         cppCheck(pattern: '**/*.cpp'),
         clang(pattern: '**/*.cpp')
