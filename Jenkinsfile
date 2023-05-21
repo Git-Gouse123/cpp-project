@@ -45,6 +45,23 @@ pipeline {
                 }
             }
         }
+		
+		stage('Compiler Warnings') {
+            steps {
+                recordIssues(
+                    tool: warningsNg(), // Use the Warnings Next Generation plugin
+                    aggregatingResults: true,
+                    canComputeNew: false,
+                    canResolveRelativePaths: false,
+                    defaultEncoding: '',
+                    excludePattern: '',
+                    healthy: '',
+                    includePattern: '**/*.cpp', // Adjust the pattern to match your source code files
+                    pattern: '',
+                    unHealthy: ''
+                )
+            }
+        }
         
         stage('SonarQube Analysis') {
             steps {
