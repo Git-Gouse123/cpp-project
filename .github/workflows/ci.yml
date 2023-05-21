@@ -1,14 +1,13 @@
 name: CI
 
 on:
-  push:
-  pull_request:
+  push
 
 jobs:
   build-and-test:
 
     name: ${{ matrix.toolchain }}
-    runs-on: ${{ matrix.os }}
+    runs-on: self-hosted
 
     strategy:
       matrix:
@@ -18,7 +17,7 @@ jobs:
           - windows-msvc
 
         configuration:
-          - Debug
+          - coverage
 
         include:
           - toolchain: linux-gcc
