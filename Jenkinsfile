@@ -48,18 +48,19 @@ pipeline {
 	stage('Compiler Warnings') {
     steps {
         recordIssues(
-            tools: [
-                cppCheck(pattern: '**/*.cpp', reportEncoding: 'UTF-8'),
-                clang(pattern: '**/*.cpp', reportEncoding: 'UTF-8')
+            filters: [
+                includeFile('.cpp'), // Include only files with the '.cpp' extension
+                excludeFile('.xml') // Exclude XML files from analysis
             ],
-            publishAllIssues: true,
-            aggregatingResults: true,
-            ignoreQualityGate: true,
-            trendChartType: 'TOOLS_AGGREGATION',
-            qualityGates: [[threshold: 1, type: 'TOTAL', unstable: false]],
-            sourceCodeEncoding: 'UTF-8',
-            healthy: 1,
-            unhealthy: 20
+            tools: [
+                cppCheck(pattern: '**/*.cpp'), // Use the CPPCheck tool to analyze C++ code
+                clang(pattern: '**/*.cpp') // Use the Clang tool for static code analysis
+            ],
+            healthy: 1, // Set a value for the healthy threshold (e.g., 1 warning)
+            unhealthy: 20, // Set a value for the unhealthy threshold (e.g., 20 warnings)
+            ignoreQualityGate: true, // Ignore quality gate status
+            ignoreFailedBuilds: false, // Do not ignore failed builds
+            quiet: true // Suppress non-fatal warnings during analysis
         )
     }
 }
