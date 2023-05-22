@@ -68,7 +68,7 @@ pipeline {
             steps {
                 script {
                     dir("${workspace}") {
-                        sh "/var/lib/jenkins/workspace/cpp-project_master/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner"
+                        sh "/var/lib/jenkins/workspace/cpp-demo_master/sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner"
                     }
                 }
             }
