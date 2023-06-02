@@ -1,0 +1,37 @@
+# SonarQube server connection settings
+sonar.host.url=http://localhost:9000
+sonar.login=admin
+sonar.password=admin
+
+# Project information
+sonar.projectKey=my-cpp-project
+sonar.projectName=My C++ Project
+sonar.projectVersion=1.0
+sonar.sources=src
+sonar.sourceEncoding=UTF-8
+
+# Language specific settings
+sonar.language=c++
+sonar.cxx.include_directories=include
+sonar.cxx.forceReanalysis=true
+
+# Code coverage
+sonar.cxx.coverage.reportPath=coverage_report.xml
+
+# Compiler and build system settings
+sonar.cxx.cppcheck.reportPath=cppcheck_report.xml
+sonar.cxx.compiler.reportPath=compiler_report.xml
+sonar.cxx.build-wrapper-output=bw-output
+
+# Additional rules and quality profiles
+sonar.qualityProfile=cpp-my-custom-profile
+sonar.cxx.other.reportPath=other_report.xml
+
+# Exclude files and directories from analysis (optional)
+sonar.exclusions=**/vendor/**/*, **/test/**/*
+
+# SonarQube C++ plugin settings
+sonar.cxx.rats.reportPath=rats_report.xml
+sonar.cxx.pclint.reportPath=pclint_report.xml
+sonar.cxx.includeDirectories=include1, include2
+sonar.cxx.errorRecoveryEnabled=true
